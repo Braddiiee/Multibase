@@ -26,7 +26,7 @@ def get_expression():
             continue
 
         if operation.strip() in arithmetic_functions:
-            signed = input("Is your number a signed number [Y/n] ? ").strip().lower()
+            signed = input("Is your number in signed or two's complement form? [SN/tc] ? ").strip().lower()
             operation_type = "arithmetic"
 
             if signed == "y":
@@ -34,7 +34,6 @@ def get_expression():
 
         else:
             operation_type = "bitwise"
-
             is_signed = False
 
         return first_binary, operation, second_binary, operation_type, is_signed
@@ -59,6 +58,25 @@ def arithmetic(first_number , operation, second_number):
 
     print(f"Result (binary): {binary_result}")
 
+def bitwise(first_number , operation, second_number=None):
+
+    if operation == "&":
+        result = first_number & second_number 
+    elif operation == "|":
+        result = first_number | second_number
+    elif operation == "~":
+        result = ~first_number
+    elif operation == "^":
+        result = first_number ^ second_number
+    elif operation == ">>":
+        result = first_number >> second_number
+    elif operation == "<<":
+        result = first_number << second_number
+    else:
+        print("Unknown bitwise operator.")
+
+    print(f"Result (decimal): {result}")
+    print(f"Result (binary): {bin(result)[2:] if result >= 0 else '-' + bin(result)[3:]}")
 
 
 def evaluate_signed(binary):
@@ -93,11 +111,12 @@ def perform_binary():
             first_number = evaluate(first_binary)
             second_number = evaluate(second_binary)
 
-
         arithmetic(first_number, operation, second_number)
 
     else:
-        print("hello")
+        first_number = evaluate(first_binary)
+        second_number = evaluate(second_binary) if operation != "~" else None
+        bitwise(first_number, operation, second_number)
 
 
 if __name__ == "__main__":
